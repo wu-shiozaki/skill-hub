@@ -1,0 +1,17 @@
+# OS が勝手に作るファイル
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# エディタ / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# 一時ファイル・バックアップ
+*.tmp
+*.bak
+*.log
