@@ -161,6 +161,63 @@
     .meta dd{margin-bottom:10px;}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+
+  /* ---- 一覧レイアウト：横並び（最大4列）と種類しぼり込み ---- */
+  .wrap{max-width:1400px;}
+
+  .filters{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 26px;}
+  .filter{
+    font:inherit;font-weight:700;font-size:14px;cursor:pointer;
+    border:2px solid var(--ink);background:#fff;color:var(--ink);
+    padding:8px 18px;line-height:1.5;
+    transition:background .12s ease,color .12s ease;
+  }
+  .filter:hover{background:var(--surface);}
+  .filter[aria-selected="true"]{background:var(--ink);color:#fff;}
+  .filter .n{font-weight:400;font-size:13px;opacity:.75;margin-left:7px;}
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:22px;
+    align-items:stretch;
+  }
+  .cards .card{
+    display:flex;flex-direction:column;
+    margin-bottom:0;
+    padding:24px 24px 22px;
+  }
+  .cards .card[hidden]{display:none;}
+
+  .cards .card-top{gap:0 10px;margin-bottom:8px;}
+  .cards .name{font-size:clamp(21px,1.7vw,26px);}
+  .cards .tagline{font-size:15px;margin:4px 0 12px;}
+  .cards .desc{max-width:none;font-size:14.5px;line-height:1.8;margin-bottom:18px;}
+  .cards .can{font-size:14px;margin-bottom:18px;}
+  .cards .meta{
+    margin-top:auto;                 /* 高さを揃えるため、ここから下をカードの底に寄せる */
+    grid-template-columns:1fr;gap:2px 0;font-size:13.5px;
+  }
+  .cards .meta dt{font-weight:700;margin-top:9px;}
+  .cards .meta dt:first-of-type{margin-top:0;}
+  .cards .actions{flex-direction:column;gap:10px;}
+  .cards .btn{text-align:center;padding:11px 14px;font-size:14.5px;}
+  .cards .btn .sub{display:block;margin-left:0;font-size:12px;}
+  .cards details{margin-top:18px;padding-top:14px;}
+  .cards summary{font-size:14px;}
+  .cards details ol{font-size:13.5px;}
+
+  .empty{
+    border:1px dashed var(--rule);background:var(--paper);
+    padding:32px;text-align:center;color:var(--ink-2);margin:0;
+  }
+
+  @media (max-width:1180px){.cards{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  @media (max-width:900px){ .cards{grid-template-columns:repeat(2,minmax(0,1fr));}}
+  @media (max-width:620px){
+    .cards{grid-template-columns:1fr;gap:18px;}
+    .cards .card{padding:26px 20px 22px;}
+  }
 </style>
 </head>
 <body>
@@ -198,7 +255,15 @@
     カードのラベルを確認してからダウンロードしてください。
   </p>
 
-  <article class="card" data-skill="absol">
+  <div class="filters" role="group" aria-label="種類でしぼり込む">
+    <button class="filter" type="button" data-filter="all"  aria-selected="true">すべて<span class="n"></span></button>
+    <button class="filter" type="button" data-filter="chat" aria-selected="false">Claudeチャット用<span class="n"></span></button>
+    <button class="filter" type="button" data-filter="code" aria-selected="false">Claude Code用<span class="n"></span></button>
+  </div>
+
+  <div class="cards" id="cards">
+
+  <article class="card" data-skill="absol" data-type="chat">
     <div class="card-top">
       <h3 class="name">アブソル</h3>
       <span class="slug">absol</span>
@@ -263,7 +328,7 @@
     </details>
   </article>
 
-  <article class="card" data-skill="nendoll">
+  <article class="card" data-skill="nendoll" data-type="chat">
     <div class="card-top">
       <h3 class="name">ネンドール</h3>
       <span class="slug">nendoll</span>
@@ -332,7 +397,7 @@
   </article>
 
 
-  <article class="card" data-skill="dialga">
+  <article class="card" data-skill="dialga" data-type="code">
     <div class="card-top">
       <h3 class="name">ディアルガ</h3>
       <span class="slug">dialga</span>
@@ -400,7 +465,51 @@
     </details>
   </article>
 
+  </div>
+
+  <p class="empty" id="empty" hidden>この種類のスキルはまだありません。</p>
+
 </main>
 
+
+<script>
+(function(){
+  var cards   = Array.prototype.slice.call(document.querySelectorAll('#cards .card'));
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.filter'));
+  var empty   = document.getElementById('empty');
+  if(!cards.length || !buttons.length) return;
+
+  function countOf(t){
+    return t === 'all' ? cards.length
+      : cards.filter(function(c){ return c.getAttribute('data-type') === t; }).length;
+  }
+
+  function apply(t){
+    var shown = 0;
+    cards.forEach(function(c){
+      var ok = (t === 'all' || c.getAttribute('data-type') === t);
+      c.hidden = !ok;
+      if(ok) shown++;
+    });
+    buttons.forEach(function(b){
+      b.setAttribute('aria-selected', b.getAttribute('data-filter') === t ? 'true' : 'false');
+    });
+    if(empty) empty.hidden = (shown !== 0);
+    try{
+      history.replaceState(null, '', t === 'all' ? location.pathname : '#' + t);
+    }catch(e){}
+  }
+
+  buttons.forEach(function(b){
+    var t = b.getAttribute('data-filter');
+    var n = b.querySelector('.n');
+    if(n) n.textContent = countOf(t);
+    b.addEventListener('click', function(){ apply(t); });
+  });
+
+  var init = (location.hash || '').replace('#', '');
+  apply(init === 'chat' || init === 'code' ? init : 'all');
+})();
+</script>
 </body>
 </html>
