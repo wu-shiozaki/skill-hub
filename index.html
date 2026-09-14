@@ -180,7 +180,7 @@
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
     gap:22px;
-    align-items:stretch;
+    align-items:start;               /* トグルを開いた分だけそのカードが伸びる。隣は伸ばさない */
   }
   .cards .card{
     display:flex;flex-direction:column;
@@ -192,20 +192,38 @@
   .cards .card-top{gap:0 10px;margin-bottom:8px;}
   .cards .name{font-size:clamp(21px,1.7vw,26px);}
   .cards .tagline{font-size:15px;margin:4px 0 12px;}
-  .cards .desc{max-width:none;font-size:14.5px;line-height:1.8;margin-bottom:18px;}
-  .cards .can{font-size:14px;margin-bottom:18px;}
+  .cards .desc{
+    max-width:none;font-size:14.5px;line-height:1.8;
+    margin:0 0 20px;
+    min-height:7.2em;                /* 閉じた状態でボタンの高さが揃うように4行分を確保 */
+  }
+
+  /* ダウンロードは横並び・トグルの外。ここまでが「開かなくても見える範囲」 */
+  .cards .actions{
+    flex-direction:row;flex-wrap:nowrap;gap:10px;margin-bottom:0;
+  }
+  .cards .btn{
+    flex:1 1 0;min-width:0;
+    text-align:center;padding:10px 8px;font-size:13.5px;
+    line-height:1.45;
+  }
+  .cards .btn .sub{
+    display:block;margin-left:0;font-size:11.5px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+
+  /* 以下はトグル。既定は閉じている */
+  .cards details{margin-top:16px;padding-top:13px;}
+  .cards details + details{margin-top:0;}
+  .cards summary{font-size:14px;}
+  .cards details ol{font-size:13.5px;}
+  .cards .can{font-size:13.5px;margin:14px 0 0;}
   .cards .meta{
-    margin-top:auto;                 /* 高さを揃えるため、ここから下をカードの底に寄せる */
+    border:0;padding:14px 0 0;margin:0;
     grid-template-columns:1fr;gap:2px 0;font-size:13.5px;
   }
   .cards .meta dt{font-weight:700;margin-top:9px;}
   .cards .meta dt:first-of-type{margin-top:0;}
-  .cards .actions{flex-direction:column;gap:10px;}
-  .cards .btn{text-align:center;padding:11px 14px;font-size:14.5px;}
-  .cards .btn .sub{display:block;margin-left:0;font-size:12px;}
-  .cards details{margin-top:18px;padding-top:14px;}
-  .cards summary{font-size:14px;}
-  .cards details ol{font-size:13.5px;}
 
   .empty{
     border:1px dashed var(--rule);background:var(--paper);
@@ -217,6 +235,7 @@
   @media (max-width:620px){
     .cards{grid-template-columns:1fr;gap:18px;}
     .cards .card{padding:26px 20px 22px;}
+    .cards .desc{min-height:0;}
   }
 </style>
 </head>
@@ -270,20 +289,20 @@
       <span class="badge badge-chat">Claudeチャット用</span>
     </div>
     <p class="tagline">翌日の商談を、前日の夜に下調べしておく。</p>
-    <p class="desc">
-      毎日18時に翌営業日のカレンダーを見て、社外アポだけを抜き出します。
-      相手企業のHP・ニュース・業界動向を調べ、
-      想定される事業課題と打ち手を3案つくって、
-      商談と同じ時間帯に「【事前情報】」という予定を置きます。
-      朝カレンダーを開いた時点で、下調べが終わっている状態になります。
-    </p>
+    <p class="desc">前日18時に翌日の社外アポを見つけ、相手企業の下調べと課題仮説をカレンダーに置いておきます。朝には準備が終わっている状態になります。</p>
 
+    <div class="actions">
+      <a class="btn" href="files/absol.zip" download>スキル本体<span class="sub">absol.zip</span></a>
+      <a class="btn ghost" href="files/absol-manual.md" download="アブソル_使い方マニュアル.md">マニュアル<span class="sub">.md</span></a>
+    </div>
+
+    <details>
+      <summary>できること・必要なもの</summary>
     <ul class="can">
       <li>社内定例を除いて、翌日の社外アポだけを自動で判別する</li>
       <li>企業情報・直近の動き・業界動向を調べて、要点だけにまとめる</li>
       <li>課題仮説を3案と、商談冒頭でそのまま投げられる問いを用意する</li>
     </ul>
-
     <dl class="meta">
       <dt>使う場所</dt>
       <dd>Claudeチャット（claude.ai／デスクトップアプリ）</dd>
@@ -296,11 +315,7 @@
       <dt>向いている人</dt>
       <dd>外部の商談が週に数件以上あり、事前準備の時間が取れていない人</dd>
     </dl>
-
-    <div class="actions">
-      <a class="btn" href="files/absol.zip" download>スキルをダウンロード<span class="sub">absol.zip</span></a>
-      <a class="btn ghost" href="files/absol-manual.md" download="アブソル_使い方マニュアル.md">マニュアルをダウンロード<span class="sub">.md</span></a>
-    </div>
+    </details>
 
     <details>
       <summary>入れたあとにやること</summary>
@@ -335,21 +350,20 @@
       <span class="badge badge-chat">Claudeチャット用</span>
     </div>
     <p class="tagline">商談のあとの3つの作業を、終わった順に片づける。</p>
-    <p class="desc">
-      商談が終わって議事録ができると、1時間おきの巡回がそれを拾います。
-      お礼メールの下書きをGmailに作り、
-      商談管理表を更新して、
-      チームのSlackチャンネルに結果を速報するところまでを自動でやります。
-      メールは下書きのままなので、
-      読んで、直して、送るのは自分の手です。
-    </p>
+    <p class="desc">商談の議事録ができたら、お礼メールの下書き・管理表の更新・Slackへの速報までを自動でやります。メールは下書きのままです。</p>
 
+    <div class="actions">
+      <a class="btn" href="files/nendoll.zip" download>スキル本体<span class="sub">nendoll.zip</span></a>
+      <a class="btn ghost" href="files/nendoll-manual.md" download="ネンドール_使い方マニュアル.md">マニュアル<span class="sub">.md</span></a>
+    </div>
+
+    <details>
+      <summary>できること・必要なもの</summary>
     <ul class="can">
       <li>議事録から、話したこと・相手の反応・次アクションを拾って整理する</li>
       <li>お礼メールの下書きをGmailに作る（送信はしない）</li>
       <li>商談管理表の行を更新し、チームへ結果を速報する</li>
     </ul>
-
     <dl class="meta">
       <dt>使う場所</dt>
       <dd>Claudeチャット（claude.ai／デスクトップアプリ）</dd>
@@ -364,11 +378,7 @@
       <dt>向いている人</dt>
       <dd>商談後のお礼メールと管理表の記入が、いつも後回しになっている人</dd>
     </dl>
-
-    <div class="actions">
-      <a class="btn" href="files/nendoll.zip" download>スキルをダウンロード<span class="sub">nendoll.zip</span></a>
-      <a class="btn ghost" href="files/nendoll-manual.md" download="ネンドール_使い方マニュアル.md">マニュアルをダウンロード<span class="sub">.md</span></a>
-    </div>
+    </details>
 
     <details>
       <summary>入れたあとにやること</summary>
@@ -404,20 +414,20 @@
       <span class="badge badge-code">Claude Code用</span>
     </div>
     <p class="tagline">日程調整ページを、条件4つ言うだけで発行する。</p>
-    <p class="desc">
-      TimeRexの日程調整ページを毎回手で作るのをやめられます。
-      「30分、自分だけ」と言えば、ブラウザを操作して設定を全部入れ、
-      お客様に貼り付ける予約URLを返してきます。
-      受付時間や入力項目といった「毎回同じところ」は覚えているので、
-      設定漏れで土日に枠が出ていた、電話番号を聞き忘れていた、が起きません。
-    </p>
+    <p class="desc">条件を4つ答えるだけで、TimeRexの予約ページを作って予約URLを返します。受付時間や入力項目は、毎回同じ設定が自動で入ります。</p>
 
+    <div class="actions">
+      <a class="btn" href="files/dialga.zip" download>スキル本体<span class="sub">dialga.zip</span></a>
+      <a class="btn ghost" href="files/dialga-manual.md" download="ディアルガ_使い方マニュアル.md">マニュアル<span class="sub">.md</span></a>
+    </div>
+
+    <details>
+      <summary>できること・必要なもの</summary>
     <ul class="can">
       <li>タイトル・所要時間・参加メンバー・参加方式の4つを答えるだけで予約ページが完成する</li>
       <li>平日10-19時／Google Meet自動発行／直近14日／入力5項目すべて必須を、毎回もれなく適用する</li>
       <li>作ったあと公開ページを実際に開いて、土日に枠が出ていないかまで確認してから報告する</li>
     </ul>
-
     <dl class="meta">
       <dt>使う場所</dt>
       <dd>Claude Code（zipを展開して ~/.claude/skills/ に置く）</dd>
@@ -432,11 +442,7 @@
       <dt>向いている人</dt>
       <dd>商談ごとに日程調整ページを作っていて、毎回同じ設定を手で入れ直している人</dd>
     </dl>
-
-    <div class="actions">
-      <a class="btn" href="files/dialga.zip" download>スキルをダウンロード<span class="sub">dialga.zip</span></a>
-      <a class="btn ghost" href="files/dialga-manual.md" download="ディアルガ_使い方マニュアル.md">マニュアルをダウンロード<span class="sub">.md</span></a>
-    </div>
+    </details>
 
     <details>
       <summary>入れたあとにやること</summary>
