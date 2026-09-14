@@ -187,7 +187,7 @@
 
   <div class="section-head">
     <h2>配布中のスキル</h2>
-    <span>2件／更新 2026-09-14</span>
+    <span>3件／更新 2026-09-14</span>
   </div>
 
   <p class="legend">
@@ -327,6 +327,75 @@
         <li>社外に出るものはありません。速報はSlackの社内チャンネルだけです。</li>
         <li>議事録に書かれていないことは書きません。推測で埋めません。</li>
         <li>管理表の既存データは消さず、更新するのは段階・次アクション・商談日だけです。</li>
+      </ol>
+    </details>
+  </article>
+
+
+  <article class="card" data-skill="dialga">
+    <div class="card-top">
+      <h3 class="name">ディアルガ</h3>
+      <span class="slug">dialga</span>
+      <span class="badge badge-code">Claude Code用</span>
+    </div>
+    <p class="tagline">日程調整ページを、条件4つ言うだけで発行する。</p>
+    <p class="desc">
+      TimeRexの日程調整ページを毎回手で作るのをやめられます。
+      「30分、自分だけ」と言えば、ブラウザを操作して設定を全部入れ、
+      お客様に貼り付ける予約URLを返してきます。
+      受付時間や入力項目といった「毎回同じところ」は覚えているので、
+      設定漏れで土日に枠が出ていた、電話番号を聞き忘れていた、が起きません。
+    </p>
+
+    <ul class="can">
+      <li>タイトル・所要時間・参加メンバー・参加方式の4つを答えるだけで予約ページが完成する</li>
+      <li>平日10-19時／Google Meet自動発行／直近14日／入力5項目すべて必須を、毎回もれなく適用する</li>
+      <li>作ったあと公開ページを実際に開いて、土日に枠が出ていないかまで確認してから報告する</li>
+    </ul>
+
+    <dl class="meta">
+      <dt>使う場所</dt>
+      <dd>Claude Code（zipを展開して ~/.claude/skills/ に置く）</dd>
+      <dt>必要な接続</dt>
+      <dd><span class="tag">Claude in Chrome</span><span class="tag">TimeRexアカウント</span><span class="tag">Googleカレンダー連携（TimeRex側）</span></dd>
+      <dt>動くタイミング</dt>
+      <dd>定期実行なし／「ディアルガ呼んで」「TimeRex作って」で都度実行</dd>
+      <dt>セットアップ</dt>
+      <dd>5分（自分のTimeRexユーザー番号を調べて書き込むだけ）</dd>
+      <dt>前提</dt>
+      <dd>ChromeでTimeRexにログイン済みであること。ログイン操作はスキルではなく自分で行います</dd>
+      <dt>向いている人</dt>
+      <dd>商談ごとに日程調整ページを作っていて、毎回同じ設定を手で入れ直している人</dd>
+    </dl>
+
+    <div class="actions">
+      <a class="btn" href="files/dialga.zip" download>スキルをダウンロード<span class="sub">dialga.zip</span></a>
+      <a class="btn ghost" href="files/dialga-manual.md" download="ディアルガ_使い方マニュアル.md">マニュアルをダウンロード<span class="sub">.md</span></a>
+    </div>
+
+    <details>
+      <summary>入れたあとにやること</summary>
+      <ol>
+        <li>zipを展開して <code>~/.claude/skills/dialga/SKILL.md</code> になるように置く</li>
+        <li>Chromeで <code>https://timerex.net/</code> を開き、移動先URLの末尾の数字（自分のTimeRex番号）を控える</li>
+        <li><code>SKILL.md</code> の「利用者設定」に、その番号と自分のTimeRex表示名を書く</li>
+        <li>ChromeでTimeRexにログインした状態にしておく</li>
+        <li>「ディアルガ呼んで。テスト用、30分、自分だけ」でテスト実行し、<b>出てきたURLを自分で開いて確認する</b></li>
+      </ol>
+      <p class="warn">
+        マニュアルをClaude Codeに渡して「この通りにセットアップして」と送れば、
+        番号の調べ方からテスト実行まで、順番に進めてくれます。
+      </p>
+    </details>
+
+    <details>
+      <summary>安全のための設計</summary>
+      <ol>
+        <li>TimeRexへのログインをしません。IDやパスワードは一切扱いません。</li>
+        <li>作るのは新規1本だけ。既存の予約ページや他の人のカレンダーは消しも触りもしません。</li>
+        <li>チーム設定・会議室連携・アカウント設定は変更しません。</li>
+        <li>発行したURLをお客様に送りません。URLを返すところまでで、送るのは自分の手です。</li>
+        <li>予約URLを推測で作りません。TimeRexが発行した文字列をそのまま読み取って返します。</li>
       </ol>
     </details>
   </article>
