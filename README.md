@@ -34,8 +34,28 @@ https://<アカウント名>.github.io/<リポジトリ名>/
 |---|---|
 | スキルの中身を直す | `files/◯◯.zip` を、同じファイル名で差し替える |
 | マニュアルを直す | `files/◯◯-manual.md` を、同じファイル名で差し替える |
-| スキルを追加する | `files/` にzipとマニュアルを置き、`index.html` にカードを1つ足す |
+| スキルを追加する | `files/` にzipとマニュアルを置き、`index.html` にカードを1つ足す（**ラベルを必ず付ける**／下記） |
 | 更新日を変える | `index.html` の「2件／更新 YYYY-MM-DD」を書き換える |
+
+### スキルを追加するときのラベル
+
+カードには「どちらのClaudeに入れるスキルか」のラベルを必ず付けます。
+入れる場所が違うため、これが無いとスタッフが迷います。
+
+| 種類 | 書くもの |
+|---|---|
+| Claudeチャット用（claude.ai／デスクトップアプリ） | `<span class="badge badge-chat">Claudeチャット用</span>` |
+| Claude Code用 | `<span class="badge badge-code">Claude Code用</span>` |
+
+書く場所は2か所です。
+
+1. `<div class="card-top">` の中、`<span class="slug">` の次の行
+2. `<dl class="meta">` の先頭の `使う場所` の行
+
+既存のカードをコピーして作れば、両方まとめて付いてきます。
+種類が違う場合だけ `badge-chat` と `badge-code` を入れ替えてください。
+
+---
 
 **ファイル名さえ変えなければ、URLは一切変わりません。**
 スタッフに再共有する必要もありません。

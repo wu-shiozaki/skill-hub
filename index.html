@@ -89,6 +89,17 @@
   .card-top{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 14px;margin-bottom:6px;}
   .name{font-size:clamp(26px,4.4vw,34px);font-weight:800;letter-spacing:.02em;margin:0;}
   .slug{font-size:13px;color:var(--ink-2);font-family:ui-monospace,Menlo,Consolas,monospace;}
+  .badge{
+    display:inline-block;font-size:12px;font-weight:700;letter-spacing:.02em;
+    padding:3px 10px;border:1.5px solid currentColor;white-space:nowrap;
+    line-height:1.5;
+  }
+  .badge-chat{color:var(--ink);background:#fff;}
+  .badge-code{color:#fff;background:var(--ink);border-color:var(--ink);}
+  .legend{
+    font-size:14px;color:var(--ink-2);line-height:2.1;
+    margin:-12px 0 30px;max-width:46em;
+  }
   .tagline{font-size:17px;font-weight:700;margin:4px 0 14px;color:var(--red);}
   .desc{margin:0 0 22px;max-width:40em;}
 
@@ -166,7 +177,7 @@
   <div class="wrap">
     <div class="howto">
       <div><b>1</b><p>使いたいスキルの zip をダウンロードする</p></div>
-      <div><b>2</b><p>Claudeの 設定 → 機能 → スキル にアップロードする</p></div>
+      <div><b>2</b><p>カードのラベルを見て、対応するClaudeにアップロードする</p></div>
       <div><b>3</b><p>マニュアルをClaudeに添付して「この通りにセットアップして」と送る</p></div>
     </div>
   </div>
@@ -176,13 +187,22 @@
 
   <div class="section-head">
     <h2>配布中のスキル</h2>
-    <span>2件／更新 2026-09-13</span>
+    <span>2件／更新 2026-09-14</span>
   </div>
+
+  <p class="legend">
+    <span class="badge badge-chat">Claudeチャット用</span>
+    はclaude.ai・デスクトップアプリの「チャット」に入れるスキル、
+    <span class="badge badge-code">Claude Code用</span>
+    はClaude Codeに入れるスキルです。<b>入れる場所が違います。</b>
+    カードのラベルを確認してからダウンロードしてください。
+  </p>
 
   <article class="card" data-skill="absol">
     <div class="card-top">
       <h3 class="name">アブソル</h3>
       <span class="slug">absol</span>
+      <span class="badge badge-chat">Claudeチャット用</span>
     </div>
     <p class="tagline">翌日の商談を、前日の夜に下調べしておく。</p>
     <p class="desc">
@@ -200,6 +220,8 @@
     </ul>
 
     <dl class="meta">
+      <dt>使う場所</dt>
+      <dd>Claudeチャット（claude.ai／デスクトップアプリ）</dd>
       <dt>必要な接続</dt>
       <dd><span class="tag">Googleカレンダー</span><span class="tag">ウェブ検索</span></dd>
       <dt>動くタイミング</dt>
@@ -245,6 +267,7 @@
     <div class="card-top">
       <h3 class="name">ネンドール</h3>
       <span class="slug">nendoll</span>
+      <span class="badge badge-chat">Claudeチャット用</span>
     </div>
     <p class="tagline">商談のあとの3つの作業を、終わった順に片づける。</p>
     <p class="desc">
@@ -263,6 +286,8 @@
     </ul>
 
     <dl class="meta">
+      <dt>使う場所</dt>
+      <dd>Claudeチャット（claude.ai／デスクトップアプリ）</dd>
       <dt>必要な接続</dt>
       <dd><span class="tag">Googleカレンダー</span><span class="tag">Gmail</span><span class="tag">Googleドライブ</span><span class="tag">Slack（任意）</span></dd>
       <dt>動くタイミング</dt>
