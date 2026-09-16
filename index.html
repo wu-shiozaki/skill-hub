@@ -263,7 +263,7 @@
 
   <div class="section-head">
     <h2>配布中のスキル</h2>
-    <span>3件／更新 2026-09-14</span>
+    <span>4件／更新 2026-09-16</span>
   </div>
 
   <p class="legend">
@@ -467,6 +467,73 @@
         <li>チーム設定・会議室連携・アカウント設定は変更しません。</li>
         <li>発行したURLをお客様に送りません。URLを返すところまでで、送るのは自分の手です。</li>
         <li>予約URLを推測で作りません。TimeRexが発行した文字列をそのまま読み取って返します。</li>
+      </ol>
+    </details>
+  </article>
+
+
+  <article class="card" data-skill="tabunne" data-type="code">
+    <div class="card-top">
+      <h3 class="name">タブンネ</h3>
+      <span class="slug">tabunne</span>
+      <span class="badge badge-code">Claude Code用</span>
+    </div>
+    <p class="tagline">商談が終わったら、管理表はもう埋まっている。</p>
+    <p class="desc">商談のカレンダー名を渡すだけで、議事録とWeb検索から会社情報・金額・次アクションまで拾って、商談管理表の1行を仕上げます。判断が入る4列は空けたまま残すので、自分で入れるのはそこだけです。</p>
+
+    <div class="actions">
+      <a class="btn" href="files/tabunne.zip" download>スキル本体<span class="sub">tabunne.zip</span></a>
+      <a class="btn ghost" href="files/tabunne-manual.md" download="タブンネ_使い方マニュアル.md">マニュアル<span class="sub">.md</span></a>
+    </div>
+
+    <details>
+      <summary>できること・必要なもの</summary>
+    <ul class="can">
+      <li>カレンダーの予定名を渡すだけで、会社名・お名前・連絡先・商談日・議事録URLまで自動で埋まる</li>
+      <li>議事録（Gemini によるメモ）から課題・反応・金額・次アクションを拾い、商談メモを1行にまとめる</li>
+      <li>HP・事業内容・創業年・住所など、カレンダーに無い会社情報はWeb検索で補う</li>
+      <li>同じ会社の2回目以降は行を増やさず、初回→提案→クロと同じ行を育てる</li>
+    </ul>
+    <dl class="meta">
+      <dt>使う場所</dt>
+      <dd>Claude Code（zipを展開して ~/.claude/skills/ に置く）</dd>
+      <dt>必要な接続</dt>
+      <dd><span class="tag">Googleカレンダー</span><span class="tag">Googleドライブ</span><span class="tag">Claude in Chrome</span><span class="tag">Web検索</span></dd>
+      <dt>動くタイミング</dt>
+      <dd>「タブンネ呼んで」「管理表を埋めて」で都度実行／定期実行にして自動で回すことも可能</dd>
+      <dt>セットアップ</dt>
+      <dd>5分（商談管理表のURLと自分の名前を書き込むだけ）</dd>
+      <dt>前提</dt>
+      <dd>商談に「Gemini によるメモ」が生成されていること。無い商談は「議事録待ち」として飛ばします</dd>
+      <dt>向いている人</dt>
+      <dd>商談のあと、管理表への転記が後回しになって溜まっていく人</dd>
+    </dl>
+    </details>
+
+    <details>
+      <summary>入れたあとにやること</summary>
+      <ol>
+        <li>zipを展開して <code>~/.claude/skills/tabunne/SKILL.md</code> になるように置く</li>
+        <li>商談管理表を開き、URLの <code>/d/</code> と <code>/edit</code> の間のIDと、<code>gid=</code> の数字を控える</li>
+        <li><code>SKILL.md</code> の「初回設定」に、そのID・gid・自分のメールアドレス・管理表A列の担当名を書く</li>
+        <li>管理表のヘッダーの並びが、スキルの列マップ（A=担当／B=会社名…）と合っているか確認する</li>
+        <li>過去の商談のカレンダー名を貼ってテスト。<b>書き込む前に確認が出るので、内容を見てからOKする</b></li>
+      </ol>
+      <p class="warn">
+        マニュアルをClaude Codeに渡して「この通りにセットアップして」と送れば、
+        IDの調べ方からテスト実行まで、順番に進めてくれます。
+      </p>
+    </details>
+
+    <details>
+      <summary>安全のための設計</summary>
+      <ol>
+        <li>ステータス・申請予定コース・商材・ヨミ判断の4列には、空欄であっても書き込みません。判断は人がするものとして残します。</li>
+        <li>A列の担当が自分以外の行には書き込みません。他の人の案件は読むだけです。</li>
+        <li>書き込む前に必ず内容を出して確認を取ります（自分で設定した自動実行時を除く）。</li>
+        <li>書いたあと必ず読み直し、触っていないはずの列が無傷かを検証してから完了と言います。</li>
+        <li>役職・人数・創業年・金額を推測で書きません。口頭の概算金額は金額欄に入れず、メモに事実として残します。</li>
+        <li>メールの送信・下書き、Slackへの投稿、予定の変更、ファイルの削除は一切しません。</li>
       </ol>
     </details>
   </article>
